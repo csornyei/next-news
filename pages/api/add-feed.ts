@@ -4,11 +4,11 @@ import {
   isTokenValid,
   saveFeeds,
 } from "../../utils/database";
-
-interface Response {
-  message: string;
-  error: string;
-}
+import {
+  validateMethodMiddleware,
+  validateAuthMiddleware,
+} from "../../utils/middlewares";
+import { Response } from "../../utils/types";
 
 interface RequestFeed {
   title?: string;
@@ -20,12 +20,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "method not allowed", message: "error" });
-    return;
-  }
-  if (!("token" in req.body)) {
-    res.status(401).json({ error: "missing token!", message: "error" });
+  try {
+    validateMethodMiddleware("POST", req, res);
+    await validateAuthMiddleware(req, res);
+  } catch (error) {
     return;
   }
   if (
@@ -39,11 +37,6 @@ export default async function handler(
   try {
     client = await connectToDatabase();
     const database = await client.db("next-news");
-    console.log(req.body.token);
-    if (!(await isTokenValid(database, req.body.token))) {
-      res.status(401).json({ error: "invalid token!", message: "error" });
-      return;
-    }
     const feedDocuments = req.body.feeds.filter((feed: RequestFeed) => {
       return "title" in feed && "url" in feed;
     });

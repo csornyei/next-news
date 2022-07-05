@@ -22,3 +22,8 @@ export interface Item {
 export interface LocalFeed extends Feed {
   id: string;
 }
+
+export interface Response {
+  message: string;
+  error: string;
+}

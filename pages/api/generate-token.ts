@@ -9,11 +9,7 @@ import {
 } from "../../utils/database";
 import sendEmail from "../../utils/email";
 import { isIssuedInLastHour, newToken } from "../../utils/token";
-
-interface Response {
-  message: string;
-  error: string;
-}
+import { Response } from "../../utils/types";
 
 export default async function handler(
   _: NextApiRequest,

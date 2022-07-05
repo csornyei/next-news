@@ -1,4 +1,4 @@
-import { Db, MongoClient } from "mongodb";
+import { Db, MongoClient, ObjectId } from "mongodb";
 import { isIssuedInLastHour, Token } from "./token";
 import { Feed } from "./types";
 
@@ -53,4 +53,12 @@ export async function saveFeeds(db: Db, feeds: Feed[]) {
   const result = await collection.insertMany(feeds);
 
   return result.insertedCount;
+}
+
+export async function deleteFeed(db: Db, id: string) {
+  const collection = db.collection<Feed>("feeds");
+  const objectId = new ObjectId(id);
+  const result = await collection.deleteOne({ _id: objectId });
+
+  return result.deletedCount;
 }
