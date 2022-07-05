@@ -1,7 +1,7 @@
 import { Db, MongoClient } from "mongodb";
 import { isIssuedInLastHour, Token } from "./token";
 
-interface Feed {
+export interface Feed {
   title: string;
   url: string;
   tags: string[];
@@ -17,9 +17,9 @@ export async function connectToDatabase(): Promise<MongoClient> {
 export async function getFeeds(db: Db) {
   const collection = db.collection<Feed>("feeds");
 
-  const feeds = collection.find();
+  const cursor = collection.find();
 
-  return feeds;
+  return cursor;
 }
 
 export async function getLatestToken(db: Db) {
