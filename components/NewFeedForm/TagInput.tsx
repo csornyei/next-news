@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Add, Cross } from "../icons";
 import useInput from "../useInput";
 
