@@ -16,7 +16,7 @@ export default function FeedTable({
     return loadings.indexOf(id) !== -1;
   };
   return (
-    <table className="table mx-6 mt-4">
+    <table className="table mx-6 mt-4 w-full">
       <thead>
         <tr>
           <th></th>

@@ -7,7 +7,7 @@ interface TagInputProps {
 }
 
 export default function TagInput({ tags, setTags }: TagInputProps) {
-  const { value: tagValue, component: Input } = useInput();
+  const { value: tagValue, component: Input, clear } = useInput();
   return (
     <div className="form-control ml-6 md:ml-0 mt-4 mr-6 lg:mr-0 w-full lg:w-6/12">
       <label className="label">
@@ -20,6 +20,7 @@ export default function TagInput({ tags, setTags }: TagInputProps) {
           className="btn btn-accent rounded-none -ml-12 w-12 h-12 translate-y-0.5"
           onClick={() => {
             setTags([...tags, tagValue]);
+            clear();
           }}
         >
           <Add />

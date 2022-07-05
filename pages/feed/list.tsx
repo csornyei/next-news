@@ -23,7 +23,7 @@ function FeedListPage({ feeds }: FeedListPageProps) {
   };
 
   return (
-    <div>
+    <div className="w-10/12">
       <FeedTable
         rows={feeds}
         loadings={loadings}
