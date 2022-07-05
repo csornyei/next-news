@@ -6,9 +6,9 @@ import {
   connectToDatabase,
   getLatestToken,
   saveToken,
-  Token,
 } from "../../utils/database";
 import sendEmail from "../../utils/email";
+import { isIssuedInLastHour, newToken } from "../../utils/token";
 
 interface Response {
   message: string;
@@ -26,22 +26,15 @@ export default async function handler(
     const tokens = await getLatestToken(database);
     const token = await tokens.next();
     if (token) {
-      const validUntil = add(new Date(token.issuedAt * 1000), { hours: 1 });
-      if (compareAsc(validUntil, Date.now()) === 1) {
-        res
-          .status(400)
-          .json({
-            error: "there is already a valid token to use!",
-            message: "error",
-          });
+      if (isIssuedInLastHour(token)) {
+        res.status(400).json({
+          error: "there is already a valid token to use!",
+          message: "error",
+        });
         return;
       }
     }
-    const newToken = randomUUID();
-    const t: Token = {
-      token: newToken,
-      issuedAt: Math.floor(Date.now() / 1000),
-    };
+    const t = newToken();
     await saveToken(database, t);
     await sendEmail(t);
     res.status(200).json({ message: "token sent", error: "" });
