@@ -1,8 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import useAuthToken from "../../components/useAuthToken";
-import Loader from "../../components/icons/Loader";
-import Delete from "../../components/icons/Delete";
+import { Loader, Delete } from "../../components/icons";
 import { LocalFeed } from "../../utils/types";
 import { connectToDatabase, getFeeds } from "../../utils/database";
 

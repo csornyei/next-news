@@ -4,7 +4,7 @@ function useAuthToken() {
   const [inputText, setInputText] = useState("");
   const [authToken, setAuthToken] = useState("");
   const AuthTokenForm = (
-    <div className="form-control ml-6 mt-4">
+    <div className="form-control ml-6 mt-4 mr-6 md:mr-0">
       <label className="label">
         <span className="label-text">Auth token</span>
       </label>
