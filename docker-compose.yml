@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  database:
+    image: mongo
+    ports:
+      - 27017:27017
+
+  next:
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+    environment:
+      DB_URL: mongodb://database:27017/next-news
