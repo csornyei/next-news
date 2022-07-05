@@ -1,11 +1,6 @@
 import { Db, MongoClient } from "mongodb";
 import { isIssuedInLastHour, Token } from "./token";
-
-export interface Feed {
-  title: string;
-  url: string;
-  tags: string[];
-}
+import { Feed } from "./types";
 
 export async function connectToDatabase(): Promise<MongoClient> {
   const client = new MongoClient(process.env["DB_URL"]!);

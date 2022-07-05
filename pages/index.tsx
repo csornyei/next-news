@@ -1,15 +1,32 @@
 import axios from "axios";
 import { randomUUID } from "crypto";
+import type { NextPage } from "next";
 import { XMLParser } from "fast-xml-parser";
 
-import type { NextPage } from "next";
-import { connectToDatabase, getFeeds, Feed } from "../utils/database";
+import List from "../components/List";
+import { connectToDatabase, getFeeds } from "../utils/database";
+import { ArticleData, LocalFeed } from "../utils/types";
 
-const Home: NextPage<any> = ({ articles, feeds }) => {
-  console.log(feeds);
-  console.log(articles);
-
-  return <div></div>;
+const Home: NextPage<{
+  articles: { [key: string]: ArticleData };
+  feeds: { [key: string]: LocalFeed };
+}> = ({ articles, feeds }) => {
+  return (
+    <div>
+      {Object.values(articles).map((article) => {
+        const source = feeds[article.id];
+        return (
+          <List
+            key={article.id}
+            id={article.id}
+            title={source.title}
+            link={source.url}
+            items={article.item}
+          />
+        );
+      })}
+    </div>
+  );
 };
 
 export default Home;
@@ -27,13 +44,9 @@ async function getRssData(url: string) {
   throw new Error("Can't get rss data!");
 }
 
-interface LocalFeed extends Feed {
-  id: string;
-}
-
 export async function getStaticProps() {
-  const articles: any[] = [];
-  const feeds: LocalFeed[] = [];
+  const articles: { [key: string]: ArticleData } = {};
+  const feeds: { [key: string]: LocalFeed } = {};
   let client;
 
   try {
@@ -46,12 +59,13 @@ export async function getStaticProps() {
         break;
       }
       const { _id, ...feed } = next;
-      feeds.push({ id: randomUUID(), ...feed });
+      const id = randomUUID();
+      feeds[id] = { id, ...feed };
     }
     await Promise.all(
-      feeds.map(async ({ url, id }) => {
+      Object.entries(feeds).map(async ([id, { url }]) => {
         try {
-          articles.push({ id, ...(await getRssData(url)) });
+          articles[id] = { id, ...(await getRssData(url)) };
         } catch (error) {
           console.error(error);
         }
