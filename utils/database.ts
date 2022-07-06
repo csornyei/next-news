@@ -66,6 +66,7 @@ class Database {
       { $unwind: "$tags" },
       { $project: { tag: "$tags", _id: 0 } },
       { $group: { _id: "$tag", count: { $count: {} } } },
+      { $sort: { count: -1 } },
     ]);
 
     const tags = this.getDataFromCursor(cursor);

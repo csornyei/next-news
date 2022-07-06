@@ -24,6 +24,6 @@ export interface LocalFeed extends Feed {
 }
 
 export interface Response {
-  message: string;
+  message: string | Object;
   error: string;
 }

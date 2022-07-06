@@ -4,9 +4,9 @@ This is my RSS Reader application.
 
 ## TODOs:
 
-- [ ] api endpoint to get tags
-- [ ] create tag pages
+- [x] api endpoint to get tags
 - [ ] navbar for tag pages
+- [ ] create tag pages
 - [ ] suggestions for tag input
 - [ ] set up hosting
 - [ ] parent-child relationship for feeds
