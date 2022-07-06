@@ -27,3 +27,6 @@ export interface Response {
   message: string | Object;
   error: string;
 }
+
+export type FeedsMap = { [key: string]: LocalFeed };
+export type ArticlesMap = { [key: string]: ArticleData };

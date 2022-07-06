@@ -36,9 +36,14 @@ class Database {
     return documents;
   }
 
-  async getFeeds() {
+  async getFeeds(tag = "") {
     const collection = this.db.collection<Feed>(Collections.Feeds);
-    const cursor = collection.find();
+    let cursor;
+    if (tag.length === 0) {
+      cursor = collection.find();
+    } else {
+      cursor = collection.find({ tags: tag });
+    }
     const feeds = await this.getDataFromCursor(cursor);
     return feeds as WithId<Feed>[];
   }
