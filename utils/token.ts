@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import { v4 } from "uuid";
 import add from "date-fns/add";
 import compareAsc from "date-fns/compareAsc";
 
@@ -8,7 +8,7 @@ export interface Token {
 }
 
 export function newToken(): Token {
-  const newToken = randomUUID();
+  const newToken = v4();
   return {
     token: newToken,
     issuedAt: Math.floor(Date.now() / 1000),

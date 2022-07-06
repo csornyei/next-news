@@ -1,10 +1,10 @@
 import axios from "axios";
-import { randomUUID } from "crypto";
 import type { NextPage } from "next";
 import { XMLParser } from "fast-xml-parser";
+import { v4 } from "uuid";
 
 import List from "../components/List";
-import { connectToDatabase, getFeeds } from "../utils/database";
+import { getDatabase } from "../utils/database";
 import { ArticleData, LocalFeed } from "../utils/types";
 
 const Home: NextPage<{
@@ -47,21 +47,14 @@ async function getRssData(url: string) {
 export async function getStaticProps() {
   const articles: { [key: string]: ArticleData } = {};
   const feeds: { [key: string]: LocalFeed } = {};
-  let client;
+  let db;
 
   try {
-    client = await connectToDatabase();
-    const database = await client.db("next-news");
-    const feedsCursor = await getFeeds(database);
-    while (await feedsCursor.hasNext()) {
-      const next = await feedsCursor.next();
-      if (!next) {
-        break;
-      }
-      const { _id, ...feed } = next;
-      const id = randomUUID();
+    db = await getDatabase();
+    (await db.getFeeds()).forEach(({ _id, ...feed }) => {
+      const id = v4();
       feeds[id] = { id, ...feed };
-    }
+    });
     await Promise.all(
       Object.entries(feeds).map(async ([id, { url }]) => {
         try {
@@ -77,7 +70,7 @@ export async function getStaticProps() {
       props: {},
     };
   } finally {
-    client?.close();
+    db?.close();
   }
 
   return {

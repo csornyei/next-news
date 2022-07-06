@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import useAuthToken from "../../components/useAuthToken";
 import { LocalFeed } from "../../utils/types";
-import { connectToDatabase, getFeeds } from "../../utils/database";
+import { getDatabase } from "../../utils/database";
 import FeedTable from "../../components/FeedTable";
 
 interface FeedListPageProps {
@@ -49,24 +49,17 @@ function FeedListPage({ feeds }: FeedListPageProps) {
 }
 
 export async function getServerSideProps() {
-  let client;
-  const feeds = [];
+  let db;
+  let feeds: LocalFeed[] = [];
   try {
-    client = await connectToDatabase();
-    const database = await client.db("next-news");
-    const feedsCursor = await getFeeds(database);
-    while (await feedsCursor.hasNext()) {
-      const next = await feedsCursor.next();
-      if (!next) {
-        break;
-      }
-      const { _id, ...feed } = next;
-      feeds.push({ ...feed, id: _id.toString() });
-    }
+    db = await getDatabase();
+    feeds = (await db.getFeeds()).map(({ _id, ...feed }) => {
+      return { ...feed, id: _id.toString() };
+    });
   } catch (error) {
     console.error(error);
   } finally {
-    client?.close();
+    await db?.close();
   }
   return {
     props: {

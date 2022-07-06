@@ -1,9 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  connectToDatabase,
-  isTokenValid,
-  saveFeeds,
-} from "../../utils/database";
+import { getDatabase } from "../../utils/database";
 import {
   validateMethodMiddleware,
   validateAuthMiddleware,
@@ -33,18 +29,17 @@ export default async function handler(
   ) {
     res.status(400).json({ error: "missing feeds!", message: "error" });
   }
-  let client;
+  let db;
   try {
-    client = await connectToDatabase();
-    const database = await client.db("next-news");
+    db = await getDatabase();
     const feedDocuments = req.body.feeds.filter((feed: RequestFeed) => {
       return "title" in feed && "url" in feed;
     });
-    const count = await saveFeeds(database, feedDocuments);
-    client.close();
+    const count = await db.saveFeeds(feedDocuments);
     res.status(200).json({ error: "", message: `${count} feeds added!` });
   } catch (error) {
-    client?.close();
     res.status(500).json({ error: "internal server error", message: "error" });
+  } finally {
+    db?.close();
   }
 }

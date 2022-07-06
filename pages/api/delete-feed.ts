@@ -1,6 +1,6 @@
 import { BSONTypeError } from "bson";
 import { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase, deleteFeed } from "../../utils/database";
+import { getDatabase } from "../../utils/database";
 import {
   validateMethodMiddleware,
   validateAuthMiddleware,
@@ -22,11 +22,10 @@ export default async function handler(
     res.status(400).json({ error: "feed id required", message: "error" });
     return;
   }
-  let client;
+  let db;
   try {
-    client = await connectToDatabase();
-    const database = await client.db("next-news");
-    const deletedCount = await deleteFeed(database, req.query.id as string);
+    db = await getDatabase();
+    const deletedCount = await db.deleteFeed(req.query.id as string);
     if (deletedCount === 0) {
       res
         .status(404)
@@ -41,6 +40,6 @@ export default async function handler(
     }
     res.status(500).json({ error: "server error", message: "error" });
   } finally {
-    client?.close();
+    db?.close();
   }
 }
