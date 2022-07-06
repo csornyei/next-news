@@ -64,8 +64,8 @@ class Database {
     const cursor = await collection.aggregate([
       { $project: { tags: 1 } },
       { $unwind: "$tags" },
-      { $project: { tag: "$tags", _id: 0 } },
-      { $group: { _id: "$tag", count: { $count: {} } } },
+      { $group: { _id: "$tags", count: { $count: {} } } },
+      { $project: { tag: "$_id", count: 1, _id: 0 } },
       { $sort: { count: -1 } },
     ]);
 
