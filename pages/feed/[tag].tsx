@@ -1,16 +1,12 @@
+import { v4 } from "uuid";
+import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
-import { useRouter } from "next/router";
-import { v4 } from "uuid";
 import List from "../../components/List";
+import SkeletonList from "../../components/SkeletonList";
 import { getDatabase } from "../../utils/database";
 import { getArticles } from "../../utils/rss";
-import {
-  ArticleData,
-  ArticlesMap,
-  FeedsMap,
-  LocalFeed,
-} from "../../utils/types";
+import { ArticlesMap, FeedsMap } from "../../utils/types";
 
 type TagPageProps = {
   articles: ArticlesMap;
@@ -21,7 +17,11 @@ const TagPage: NextPage<TagPageProps> = ({ articles, feeds }) => {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div>This is only a fallback page...</div>;
+    return (
+      <div>
+        <SkeletonList />
+      </div>
+    );
   }
   return (
     <div>
