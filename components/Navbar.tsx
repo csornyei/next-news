@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "./icons";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 let initialized = false;
 
@@ -16,6 +17,7 @@ interface Response {
 }
 
 export default function Navbar() {
+  const router = useRouter();
   const [tags, setTags] = useState<Tag[]>([]);
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -33,6 +35,19 @@ export default function Navbar() {
         });
     }
   }, []);
+
+  const activePage = () => {
+    if (router.pathname !== "/feed/[tag]") {
+      return "";
+    }
+    if (!router.query.tag) {
+      return "";
+    }
+    if (Array.isArray(router.query.tag)) {
+      return router.query.tag[0];
+    }
+    return router.query.tag;
+  };
 
   return (
     <nav className="navbar bg-primary">
@@ -53,9 +68,15 @@ export default function Navbar() {
             {tags.map(({ tag }, idx) => {
               if (idx < 3) {
                 return (
-                  <li>
+                  <li className="pr-1" key={tag}>
                     <Link href={`/feed/${tag}`}>
-                      <a className="capitalize"> {tag} </a>
+                      <a
+                        className={`capitalize ${
+                          activePage() === tag ? "bg-base-300" : ""
+                        }`}
+                      >
+                        {tag}
+                      </a>
                     </Link>
                   </li>
                 );
@@ -70,9 +91,15 @@ export default function Navbar() {
                 {tags.map(({ tag }, idx) => {
                   if (idx >= 3) {
                     return (
-                      <li>
+                      <li key={tag}>
                         <Link href={`/feed/${tag}`}>
-                          <a className="capitalize"> {tag} </a>
+                          <a
+                            className={`capitalize ${
+                              activePage() === tag ? "bg-base-300" : ""
+                            }`}
+                          >
+                            {tag}
+                          </a>
                         </Link>
                       </li>
                     );
