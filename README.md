@@ -9,6 +9,9 @@ This is my RSS Reader application.
 - [x] create tag pages
   - [x] skeleton loading for tag pages
 - [ ] suggestions for tag input
+  - [x] create a trie for suggestions
+  - [ ] get suggestions from the trie on `/api/suggest-tags`
+  - [ ] add list of suggestions to the TagInput component
 - [ ] set up hosting
 - [ ] parent-child relationship for feeds
 - [ ] favorites
