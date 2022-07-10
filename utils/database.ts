@@ -64,7 +64,7 @@ class Database {
     return result.deletedCount;
   }
 
-  async getTags() {
+  async getTags(limit: number = 6) {
     const collection = this.db.collection<Feed>("feeds");
     const cursor = await collection.aggregate([
       { $project: { tags: 1 } },
@@ -72,6 +72,7 @@ class Database {
       { $group: { _id: "$tags", count: { $count: {} } } },
       { $project: { tag: "$_id", count: 1, _id: 0 } },
       { $sort: { count: -1 } },
+      { $limit: limit },
     ]);
 
     const tags = this.getDataFromCursor(cursor);
