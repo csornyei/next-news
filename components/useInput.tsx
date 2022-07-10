@@ -1,20 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Input from "./Input";
 
-export default function useInput() {
+interface useInputProps {
+  setValueEffect: (value: string) => any;
+  suggestions: string[];
+}
+
+export default function useInput(
+  { setValueEffect, suggestions }: useInputProps = {
+    setValueEffect: (_) => {},
+    suggestions: [],
+  }
+) {
   const [value, setValue] = useState("");
 
   const clear = () => {
     setValue("");
   };
 
+  useEffect(() => {
+    setValueEffect(value);
+  }, [value, setValueEffect]);
+
   const component = (className: string = "") => (
-    <input
-      type="text"
+    <Input
+      className={className}
       value={value}
-      className={`input input-bordered w-full max-w-xs ${className}`}
-      onChange={({ target: { value } }) => {
-        setValue(value);
-      }}
+      setValue={setValue}
+      suggestions={suggestions}
     />
   );
 

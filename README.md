@@ -11,9 +11,10 @@ This is my RSS Reader application.
 - [ ] suggestions for tag input
   - [x] create a trie for suggestions
   - [x] get suggestions from the trie on `/api/suggest-tags`
+  - [x] add storybook
   - [ ] add list of suggestions to the TagInput component
 - [ ] set up hosting
 - [ ] parent-child relationship for feeds
 - [ ] favorites
 - [ ] hide read articles
-- [ ] add tests, storybook, etc...
+- [ ] add tests, etc...

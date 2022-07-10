@@ -10,6 +10,7 @@ services:
 
   next:
     build: .
+    image: next-news-app
     ports:
       - 3000:3000
     volumes:
@@ -18,3 +19,13 @@ services:
       - database
     environment:
       DB_URL: mongodb://database:27017/next-news
+
+  storybook:
+    build: .
+    image: next-next-storybook
+    init: true
+    command: npm run storybook
+    ports:
+      - 6006:6006
+    volumes:
+      - .:/app
