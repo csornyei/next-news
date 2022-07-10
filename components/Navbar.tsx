@@ -53,7 +53,9 @@ export default function Navbar() {
     <nav className="navbar bg-primary">
       <div className="flex-1">
         <Link href="/">
-          <a className="btn btn-ghost capitalize text-xl">Mate's News Site</a>
+          <a className="btn btn-ghost capitalize text-xl">
+            Mate&apos;s News Site
+          </a>
         </Link>
       </div>
       <div className="flex-none">

@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 interface InputProps {
   className: string;
   value: string;
@@ -14,7 +12,7 @@ export default function Input({
   suggestions = [],
 }: InputProps) {
   return (
-    <Fragment>
+    <div className="flex flex-col w-full max-w-xs">
       <input
         type="text"
         value={value}
@@ -39,6 +37,6 @@ export default function Input({
           ))}
         </ul>
       ) : null}
-    </Fragment>
+    </div>
   );
 }

@@ -15,6 +15,7 @@ module.exports = {
         },
       },
     },
+    "storybook-addon-mock/register",
   ],
   framework: "@storybook/react",
   core: {

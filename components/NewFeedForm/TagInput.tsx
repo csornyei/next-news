@@ -1,3 +1,5 @@
+import axios from "axios";
+import { startTransition, useEffect, useState } from "react";
 import { Add, Cross } from "../icons";
 import useInput from "../useInput";
 
@@ -7,20 +9,44 @@ interface TagInputProps {
 }
 
 export default function TagInput({ tags, setTags }: TagInputProps) {
-  const { value: tagValue, component: Input, clear } = useInput();
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const {
+    value: tagValue,
+    component: Input,
+    clear,
+  } = useInput({ suggestions });
+
+  useEffect(() => {
+    startTransition(() => {
+      if (tagValue.length > 0) {
+        axios
+          .post("/api/suggest-tags", {
+            tag: tagValue,
+          })
+          .then(({ data }) => {
+            setSuggestions(data.message);
+          })
+          .catch(() => {});
+      } else {
+        setSuggestions([]);
+      }
+    });
+  }, [tagValue]);
+
   return (
     <div className="form-control ml-6 md:ml-0 mt-4 mr-6 lg:mr-0 w-full lg:w-6/12">
       <label className="label">
         <span className="label-text">Tags</span>
       </label>
-      <div>
-        {Input("rounded-none pr-2")}
+      <div className="input-group">
+        {Input("")}
         <button
-          disabled={tagValue.length === 0}
-          className="btn btn-accent rounded-none -ml-12 w-12 h-12 translate-y-0.5"
+          className="btn btn-accent btn-square w-12 h-12 z-20"
           onClick={() => {
-            setTags([...tags, tagValue]);
-            clear();
+            if (tagValue.length > 0) {
+              setTags([...tags, tagValue]);
+              clear();
+            }
           }}
         >
           <Add />

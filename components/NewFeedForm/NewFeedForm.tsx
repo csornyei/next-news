@@ -28,7 +28,7 @@ export default function NewFeedForm({ addFeed, validate }: NewFeedProps) {
       </div>
       <TagInput tags={tags} setTags={setTags} />
       <button
-        className="btn btn-sm btn-secondary w-16 mt-2 ml-6 md:ml-0"
+        className="btn btn-sm btn-secondary w-32 mt-2 ml-6 md:ml-0"
         disabled={!validate({ title, url, tags })}
         onClick={() => {
           addFeed({
@@ -40,7 +40,7 @@ export default function NewFeedForm({ addFeed, validate }: NewFeedProps) {
           clearUrl();
         }}
       >
-        Add
+        Add Feed
       </button>
     </section>
   );
