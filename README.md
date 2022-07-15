@@ -8,7 +8,7 @@ This is my RSS Reader application.
 - [x] navbar for tag pages
 - [x] create tag pages
   - [x] skeleton loading for tag pages
-- [ ] suggestions for tag input
+- [x] suggestions for tag input
   - [x] create a trie for suggestions
   - [x] get suggestions from the trie on `/api/suggest-tags`
   - [x] add storybook

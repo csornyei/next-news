@@ -1,5 +1,5 @@
 import { SMTPClient } from "emailjs";
-import { Token } from "./database";
+import { Token } from "./token";
 import { format } from "date-fns";
 
 export default async function sendEmail(token: Token) {

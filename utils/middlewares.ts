@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase, isTokenValid } from "./database";
+import { getDatabase } from "./database";
 import { Response } from "./types";
 
 type Methods = "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
@@ -26,9 +26,8 @@ export async function validateAuthMiddleware(
     res.status(401).json({ error: "missing token!", message: "error" });
     throw new Error("missing token");
   }
-  const client = await connectToDatabase();
-  const database = await client.db("next-news");
-  if (!(await isTokenValid(database, req.headers.authorization!))) {
+  const db = await getDatabase();
+  if (!(await db.isTokenValid(req.headers.authorization!))) {
     res.status(401).json({ error: "invalid token!", message: "error" });
     throw new Error("invalid token");
   }
